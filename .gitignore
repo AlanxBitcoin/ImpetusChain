@@ -1,0 +1,13 @@
+.venv/
+__pycache__/
+.pytest_cache/
+*.pyc
+*.pyo
+*.pyd
+dist/
+build/
+*.egg-info/
+
+# Per-project generated/editable data
+projects/*/data/
+!projects/.gitkeep
