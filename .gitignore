@@ -11,3 +11,8 @@ build/
 # Per-project generated/editable data
 projects/*/data/
 !projects/.gitkeep
+
+# Per-project encrypted API keys
+projects/*/core/api_keys.enc.json
+projects/*/core/*secret*.json
+projects/*/core/*api_key*.json

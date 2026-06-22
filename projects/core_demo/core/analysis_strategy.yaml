@@ -1,0 +1,16 @@
+version: 1
+task_id: node_speculation
+objective: "Analyze speculative opportunity for a selected node."
+output_requirements:
+  - "Opportunity direction: long / short / neutral"
+  - "3-5 logic chain bullets"
+  - "Trigger conditions"
+  - "Risk factors"
+  - "Data to collect next"
+scoring:
+  horizon: "1-20 trading days"
+  confidence_scale: "0-100"
+  risk_reward_scale: "1-5"
+constraints:
+  - "State assumptions explicitly"
+  - "Do not fabricate unavailable data"

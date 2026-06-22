@@ -1,69 +1,73 @@
-# Design: AI Financial Impetus Transmission Chain
+# 设计文档：AI 金融 Impetus 传导链
 
-## 1. Vision
-Build a shared codebase where each transmission chain is an independent project with its own data folder, while all projects reuse the same engine and tooling.
+## 1. 愿景
+构建一套“代码共享、项目独立”的系统：每条传导链都是一个独立项目，拥有自己的数据目录；所有项目复用同一套引擎和工具。
 
-This supports a practical workflow:
-1. AI + code generate a first draft chain.
-2. Human analysts review and adjust nodes, edges, and weights.
-3. The engine runs propagation and evaluation repeatedly.
+这支持如下实用流程：
+1. AI + 代码先生成链路初稿。
+2. 人工分析师审核并调整节点、边和权重。
+3. 引擎反复运行传导与评估，持续迭代。
 
-## 2. Product Principles
-- Project-level isolation: each project has independent data files and iteration history.
-- Shared engine: parsing, validation, propagation, and evaluation logic are common code.
-- Human-in-the-loop by default: generated data is draft only, final authority is manual review.
-- Deterministic core: same input data should produce reproducible outputs.
+## 2. 产品原则
+- 项目级隔离：每个项目有独立数据文件和迭代记录。
+- 引擎共享：解析、校验、传播、评估逻辑统一复用。
+- 默认人机协作：AI 生成的是草稿，最终以人工审核为准。
+- 核心可复现：相同输入应得到可重复的结果。
 
-## 3. Current Scope (Implemented)
-- Tree-based chain structure and validation (`validate_tree`).
-- Project initialization from AI seed template (`init-project`).
-- Project-level run command (`run`).
-- Independent project data storage under `projects/<project>/data`.
-- Project requirements template generation (`requirements.md`) for iterative requirement capture.
+## 3. 当前范围（已实现）
+- 树结构链路建模与校验（`validate_tree`）。
+- 基于 AI seed 模板的项目初始化（`init-project`）。
+- 按项目执行传播计算（`run`）。
+- HTTP 浏览器 UI（`ui`）支持新建项目。
+- 项目数据独立存储在 `projects/<project>/data`。
+- 自动生成项目需求模板（`requirements.md`），用于持续需求整理。
 
-## 4. Data Contract
-Primary file:
+## 4. 数据约定
+主文件：
 - `projects/<project>/data/chain.json`
 
-Suggested companion file:
+建议配套文件：
 - `projects/<project>/data/requirements.md`
 
-`chain.json` minimal fields:
-- `project`: project id
-- `schema_version`: schema version
-- `root`: root node name
-- `generated`: generation metadata
-- `nodes`: node list with `name`, `layer`, optional `metadata`
-- `edges`: edge list with `src`, `dst`, `weight`
+`chain.json` 最小字段：
+- `project`：项目标识
+- `schema_version`：数据结构版本
+- `root`：根节点名称
+- `generated`：生成元信息
+- `nodes`：节点列表（`name`、`layer`、可选 `metadata`）
+- `edges`：边列表（`src`、`dst`、`weight`）
 
-## 5. Workflow (Requirement + Development Loop)
-1. Capture or update business requirements in project `requirements.md`.
-2. Generate or refresh chain draft (`init-project --force` if needed).
-3. Human edits `chain.json`.
-4. Run propagation and inspect outputs.
-5. Record decisions and unresolved questions in `requirements.md`.
-6. Implement code changes only when repeated manual pain points appear.
+## 5. 工作流（需求与开发并行）
+1. 在项目 `requirements.md` 中补充或更新业务需求。
+2. 生成或刷新链路草稿（必要时使用 `init-project --force`）。
+3. 人工编辑 `chain.json`。
+4. 运行传播并检查输出结果。
+5. 将决策与未决问题记录回 `requirements.md`。
+6. 当人工操作反复出现痛点时，再抽象为代码能力。
 
-## 6. Architecture
-- `main.py`: CLI orchestration (`init-project`, `run`)
-- `project_store.py`: project data pathing and persistence
-- `ai_seed.py`: AI seed draft generation
-- `chain.py`: propagation engine + tree validation
-- `pipeline.py`: project loading + runtime execution
+## 6. 架构
+- `main.py`：CLI 编排（`init-project`、`run`）
+- `ui_server.py`：HTTP UI 服务（浏览器操作入口）
+- `project_store.py`：项目路径与数据读写
+- `project_service.py`：项目创建与命名校验
+- `ai_seed.py`：AI 草稿数据生成
+- `chain.py`：传播引擎与树校验
+- `pipeline.py`：项目加载与运行流程
 
-## 7. Near-term Roadmap
-- Add schema validation command (`validate-project`).
-- Add versioned snapshots for manual edits.
-- Add factor metadata taxonomy and constraints.
-- Add backtest and scoring modules.
-- Add multi-project comparison reports.
+## 7. 近期路线图
+- 增加结构校验命令（`validate-project`）。
+- 增加人工编辑的版本快照。
+- 增加因子元数据分类与约束。
+- 增加回测与评分模块。
+- 增加多项目对比报告。
 
-## 8. Open Decisions
-- Weight semantics: bounded in `[-1, 1]` or extensible?
-- Layer taxonomy: fixed enum vs project-defined vocabulary?
-- Manual review status: file flag only vs richer approval workflow?
-- Data source strategy: local files first vs connector interfaces now?
+## 8. 待定决策
+- 权重语义：限制在 `[-1, 1]`，还是允许扩展？
+- 层级分类：固定枚举，还是项目自定义词表？
+- 人工审核状态：仅文件标记，还是更完整审批流？
+- 数据源策略：先本地文件，还是尽早抽象连接器接口？
 
-## 9. Change Log
-- 2026-06-23: Introduced projectized workflow and tree validation.
-- 2026-06-23: Added per-project requirements template generation.
+## 9. 变更记录
+- 2026-06-23：引入项目化工作流与树结构校验。
+- 2026-06-23：新增项目级需求模板自动生成。
+- 2026-06-23：新增 HTTP UI，可在浏览器中创建项目。

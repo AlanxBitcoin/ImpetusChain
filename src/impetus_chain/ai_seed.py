@@ -1,11 +1,10 @@
 from datetime import datetime, timezone
 
 
-def build_ai_seed_project(project: str) -> dict:
+def build_ai_seed_project(project: str, root: str = "macro_impetus") -> dict:
     # Placeholder "AI + code" starter: produces an editable draft tree.
-    root = "macro_impetus"
     nodes = [
-        {"name": "macro_impetus", "layer": "macro", "metadata": {"role": "root"}},
+        {"name": root, "layer": "macro", "metadata": {"role": "root"}},
         {"name": "liquidity", "layer": "macro"},
         {"name": "risk_sentiment", "layer": "macro"},
         {"name": "growth_style", "layer": "style"},
@@ -14,8 +13,8 @@ def build_ai_seed_project(project: str) -> dict:
         {"name": "bank_equity", "layer": "asset"},
     ]
     edges = [
-        {"src": "macro_impetus", "dst": "liquidity", "weight": 0.9},
-        {"src": "macro_impetus", "dst": "risk_sentiment", "weight": 0.7},
+        {"src": root, "dst": "liquidity", "weight": 0.9},
+        {"src": root, "dst": "risk_sentiment", "weight": 0.7},
         {"src": "liquidity", "dst": "growth_style", "weight": 0.8},
         {"src": "risk_sentiment", "dst": "value_style", "weight": -0.4},
         {"src": "growth_style", "dst": "tech_equity", "weight": 0.7},
@@ -35,4 +34,3 @@ def build_ai_seed_project(project: str) -> dict:
         "nodes": nodes,
         "edges": edges,
     }
-
